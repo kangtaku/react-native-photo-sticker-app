@@ -12,6 +12,7 @@ var App = React.createClass({
 	render() {
 		return (
 			<Navigator
+				style={styles.container}
 				initialRoute={{name: 'Editor', index: 0}}
 				renderScene={(route, navigator) => 
 					<ImageEditorView
@@ -31,7 +32,11 @@ var App = React.createClass({
 });
 
 const styles = StyleSheet.create({
-
+	container: {
+    	flex: 1,
+    	backgroundColor: 'white',
+    	flexDirection:'column'
+  	}
 });
 
 export default App;

@@ -12,14 +12,18 @@ var NavigationBar = React.createClass({
 	render() {
 		const { name,
 				leftButton,
-				rightButton } = this.props;
+				rightButton,
+				onLeftButton,
+				onRightButton } = this.props;
 		return (
 			<View style={styles.navigation}>
-				<TouchableHighlight>
-					<Text style={styles.toolbarButton}>BACK</Text>
+				<TouchableHighlight onPress={onLeftButton}>
+					<Text style={styles.toolbarButton}>
+						BACK
+					</Text>
 				</TouchableHighlight>
 				<Text style={styles.toolbarTitle}>{name}</Text>
-				<TouchableHighlight>
+				<TouchableHighlight onPress={onRightButton}>
 					<Text style={styles.toolbarButton}>
 						SAVE
 					</Text>
