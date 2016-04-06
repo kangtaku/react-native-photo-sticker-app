@@ -9,8 +9,30 @@ import React, {
 import NavigationBar from '../components/navigationBar';
 
 var ImageEditorView = React.createClass({
-	componentWillMount() {
+	getInitialState() {
+		return {
+			markers: []
+		};
+	},
 
+	componentWillMount() {
+	},
+
+	componentDidMount() {
+	},
+
+	initImageBoxLocation() {
+		var imageBoxFrame = {};
+		this.refs.imageBox.measure( (fx, fy, width, height, px, py) => {
+			this.imageBoxFrame = {
+				fx: fx,
+				fy:	fy,
+				width: width,
+				height: height
+			};
+			console.log(width);
+		});
+		return imageBoxFrame;
 	},
 
 	render() {
@@ -30,7 +52,9 @@ var ImageEditorView = React.createClass({
 							onPress={this.handlePressImageBox}
 							style={styles.image}
 							source={require('../../resources/bg2.jpg')}
-							resizeMode='contain'/>
+							resizeMode='contain'>
+							<Text>asdf </Text>
+						</Image>
 					</View>
 					<View style={styles.toolBox}>
 					</View>
@@ -39,18 +63,27 @@ var ImageEditorView = React.createClass({
 		);
 	},
 
-	_onPressImage(e) {;
-		const { locationX, locationY } = e.nativeEvent;
-		this.refs.imageBox.measure( (fx, fy, width, height, px, py) => {
-			console.log('Component width is: ' + width)
-            console.log('Component height is: ' + height)
-            console.log('X offset to frame: ' + fx)
-            console.log('Y offset to frame: ' + fy)
-            console.log('X offset to page: ' + px)
-            console.log('Y offset to page: ' + py)
-
+	setMarkerOnImageBox(x, y) {
+		const newMarker = (
+			<Image ref="marker"
+				   style={styles.marker}
+				   source={require('../../resources/close.png')}
+			/>
+		);
+		let markers = this.state.markers;
+		markers.add(newMarker);
+		this.setState({
+			markers: markser
 		});
-		console.log(locationX + ',' + locationY);
+	},
+
+	_onPressImage(e) {
+		const { locationX, locationY } = e.nativeEvent;
+		const { fx, fy, width, height } = this.initImageBoxLocation();
+		if ((fx < locationX && fx + width > locationX) &&
+			(fy < locationY && fy + height > locationY)) {
+			this.setMarkerOnImageBox(x, y);
+		}
 	}
 });
 
@@ -60,7 +93,10 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	navBar: {
-		flex: 1
+	},
+	marker: {
+		width: 25,
+		height: 25
 	},
 	contentContainer: {
 		flexDirection: 'column',
@@ -72,7 +108,7 @@ const styles = StyleSheet.create({
 	},
 	imageBox: {
 		flex: 3,
-		flexDirection: 'row',
+		flexDirection: 'column',
 	},
 	toolBox: {
 		backgroundColor: 'black',
