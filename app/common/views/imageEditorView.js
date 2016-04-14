@@ -8,6 +8,10 @@ import React, {
 
 import NavigationBar from '../components/navigationBar';
 import Marker from '../components/marker';
+import ToolBox from '../components/toolBox';
+
+import ViewSnapshotter from 'react-native-view-snapshot';
+import RNFS from 'react-native-fs';
 
 const ImageEditorView = React.createClass({
 	getInitialState() {
@@ -22,6 +26,24 @@ const ImageEditorView = React.createClass({
 	componentDidMount() {
 	},
 
+	imagePath() {
+		return RNFS.CachesDirectoryPath+"/example.png";
+	},
+
+	saveAction() {
+		
+		ViewSnapshotter.saveSnapshotToPath(React.findNodeHandle(this.refs.imageBox), 
+						this.imagePath(), 
+						(error, successfulWrite) => {
+			if (successfulWrite) {
+		        //this.setState({catSaved: true})
+		    } else {
+		      	console.log(error)
+		    }
+		});
+		
+	},
+
 	render() {
 		const { name, onForward } = this.props;
 
@@ -30,7 +52,7 @@ const ImageEditorView = React.createClass({
 				<NavigationBar
 					name={name}
 					style={styles.navBar}
-					onRightButton={onForward}
+					onRightButton={this.saveAction}
 				/>
 				<View style={styles.contentContainer}>
 					<View 
@@ -52,8 +74,7 @@ const ImageEditorView = React.createClass({
 							})}
 						</Image>
 					</View>
-					<View style={styles.toolBox}>
-					</View>
+					<ToolBox style={styles.toolBox}/>
 				</View>
 			</View>
 		);
@@ -89,10 +110,6 @@ const styles = StyleSheet.create({
 	},
 	navBar: {
 	},
-	marker: {
-		width: 25,
-		height: 25
-	},
 	contentContainer: {
 		flexDirection: 'column',
 		flex: 1
@@ -102,19 +119,11 @@ const styles = StyleSheet.create({
 		alignSelf: 'center'
 	},
 	imageBox: {
-		flex: 3,
-		flexDirection: 'row',
+		flex: 6,
+		flexDirection: 'column',
 	},
 	toolBox: {
-		backgroundColor: 'black',
-		flex: 1
-	},
-	test: {
-		color: 'black',
-		fontSize: 10,
-		position: 'absolute',
-		top: 50,
-		left: 50
+	backgroundColor: 'gray'
 	}
 });
 

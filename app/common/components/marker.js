@@ -35,7 +35,7 @@ const Marker = React.createClass({
 			<View>
 				<Image
 					source={require('../../resources/close.png')}
-					style={this.getLocationStyle(x, y)} 
+					style={[this.getLocationStyle(x, y), {borderRadius: 5, tintColor: '#5ac8fa'}]} 
 				/>
 			</View>
 		);

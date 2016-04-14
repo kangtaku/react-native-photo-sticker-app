@@ -7,7 +7,7 @@ import React, {
 	Text
 } from 'react-native';
 
-var NavigationBar = React.createClass({
+const NavigationBar = React.createClass({
 
 	render() {
 		const { name,
@@ -35,8 +35,8 @@ var NavigationBar = React.createClass({
 
 const styles = StyleSheet.create({
 	navigation: {
-		height: 50,
 		marginTop: 20,
+		height: 50,
 		backgroundColor: '#2B2A2A',
 		flexDirection: 'row',
 		paddingTop: 20,
