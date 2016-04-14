@@ -7,8 +7,9 @@ import React, {
 } from 'react-native';
 
 import NavigationBar from '../components/navigationBar';
+import Marker from '../components/marker';
 
-var ImageEditorView = React.createClass({
+const ImageEditorView = React.createClass({
 	getInitialState() {
 		return {
 			markers: []
@@ -21,22 +22,9 @@ var ImageEditorView = React.createClass({
 	componentDidMount() {
 	},
 
-	initImageBoxLocation() {
-		var imageBoxFrame = {};
-		this.refs.imageBox.measure( (fx, fy, width, height, px, py) => {
-			this.imageBoxFrame = {
-				fx: fx,
-				fy:	fy,
-				width: width,
-				height: height
-			};
-			console.log(width);
-		});
-		return imageBoxFrame;
-	},
-
 	render() {
 		const { name, onForward } = this.props;
+
 		return (
 			<View style={styles.container}>
 				<NavigationBar
@@ -53,7 +41,15 @@ var ImageEditorView = React.createClass({
 							style={styles.image}
 							source={require('../../resources/bg2.jpg')}
 							resizeMode='contain'>
-							<Text>asdf </Text>
+							{this.state.markers.map((marker, key) => {
+								console.log(marker);
+								return (
+									<Marker 
+										key={key} 
+										x={marker.x} 
+										y={marker.y}
+									/>);
+							})}
 						</Image>
 					</View>
 					<View style={styles.toolBox}>
@@ -64,26 +60,25 @@ var ImageEditorView = React.createClass({
 	},
 
 	setMarkerOnImageBox(x, y) {
-		const newMarker = (
-			<Image ref="marker"
-				   style={styles.marker}
-				   source={require('../../resources/close.png')}
-			/>
-		);
+		let newMarker = {
+			x: x,
+			y: y
+		}
 		let markers = this.state.markers;
-		markers.add(newMarker);
+		markers.push(newMarker);
 		this.setState({
-			markers: markser
+			markers: markers
 		});
 	},
 
 	_onPressImage(e) {
 		const { locationX, locationY } = e.nativeEvent;
-		const { fx, fy, width, height } = this.initImageBoxLocation();
-		if ((fx < locationX && fx + width > locationX) &&
-			(fy < locationY && fy + height > locationY)) {
-			this.setMarkerOnImageBox(x, y);
-		}
+		this.refs.imageBox.measure( (fx, fy, width, height, px, py) => {
+			if ((fx < locationX && fx + width > locationX) &&
+				(fy < locationY && fy + height > locationY)) {
+				this.setMarkerOnImageBox(locationX, locationY);
+			}
+		});
 	}
 });
 
@@ -108,11 +103,18 @@ const styles = StyleSheet.create({
 	},
 	imageBox: {
 		flex: 3,
-		flexDirection: 'column',
+		flexDirection: 'row',
 	},
 	toolBox: {
 		backgroundColor: 'black',
 		flex: 1
+	},
+	test: {
+		color: 'black',
+		fontSize: 10,
+		position: 'absolute',
+		top: 50,
+		left: 50
 	}
 });
 

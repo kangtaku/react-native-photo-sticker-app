@@ -35,10 +35,11 @@ var NavigationBar = React.createClass({
 
 const styles = StyleSheet.create({
 	navigation: {
-		height: 60,
+		height: 50,
+		marginTop: 20,
 		backgroundColor: '#2B2A2A',
 		flexDirection: 'row',
-		paddingTop: 30,
+		paddingTop: 20,
 		paddingBottom: 10
 	},
 	toolbarButton: {
