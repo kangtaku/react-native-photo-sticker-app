@@ -3,7 +3,8 @@ import React, {
 	View,
 	Image,
 	Text,
-	PanResponder
+	PanResponder,
+	Alert
 } from 'react-native';
 
 import NavigationBar from '../components/navigationBar';
@@ -39,7 +40,13 @@ const ImageEditorView = React.createClass({
 						this.imagePath(), 
 						(error, successfulWrite) => {
 			if (successfulWrite) {
-				console.log('saved');
+				Alert.alert(
+				  '이미지가 저장되었습니다',
+				  'My Alert Msg',
+				  [
+				    {text: 'OK', onPress: () => console.log('OK Pressed')},
+				  ]
+				)
 		    } else {
 		      	console.log(error)
 		    }
