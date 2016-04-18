@@ -13,10 +13,13 @@ import ToolBox from '../components/toolBox';
 import ViewSnapshotter from 'react-native-view-snapshot';
 import RNFS from 'react-native-fs';
 
+const colorList = ['red', 'yellow', 'green'];
+
 const ImageEditorView = React.createClass({
 	getInitialState() {
 		return {
-			markers: []
+			markers: [],
+			selectedColorIdx: 0
 		};
 	},
 
@@ -27,7 +30,7 @@ const ImageEditorView = React.createClass({
 	},
 
 	imagePath() {
-		return RNFS.CachesDirectoryPath+"/example.png";
+		return RNFS.CachesDirectoryPath+"/example.jpg";
 	},
 
 	saveAction() {
@@ -36,7 +39,7 @@ const ImageEditorView = React.createClass({
 						this.imagePath(), 
 						(error, successfulWrite) => {
 			if (successfulWrite) {
-		        //this.setState({catSaved: true})
+				console.log('saved');
 		    } else {
 		      	console.log(error)
 		    }
@@ -46,7 +49,6 @@ const ImageEditorView = React.createClass({
 
 	render() {
 		const { name, onForward } = this.props;
-
 		return (
 			<View style={styles.container}>
 				<NavigationBar
@@ -56,7 +58,7 @@ const ImageEditorView = React.createClass({
 				/>
 				<View style={styles.contentContainer}>
 					<View 
-					 style={styles.imageBox} onStartShouldSetResponder={this._onPressImage}>
+					 style={styles.imageBox} onStartShouldSetResponder={this.onPressImage}>
 						<Image 
 							ref="imageBox"
 							onPress={this.handlePressImageBox}
@@ -64,26 +66,37 @@ const ImageEditorView = React.createClass({
 							source={require('../../resources/bg2.jpg')}
 							resizeMode='contain'>
 							{this.state.markers.map((marker, key) => {
-								console.log(marker);
 								return (
 									<Marker 
 										key={key} 
 										x={marker.x} 
 										y={marker.y}
+										color={marker.color}
 									/>);
 							})}
 						</Image>
 					</View>
-					<ToolBox style={styles.toolBox}/>
+					<ToolBox 
+						flex="2"
+						selectedColorIdx={this.state.selectedColorIdx}
+						onSelectColor={this.onSelectColor}
+					/>
 				</View>
 			</View>
 		);
 	},
 
+	onSelectColor(selectedColorIdx) {
+		this.setState({
+			selectedColorIdx: selectedColorIdx
+		});
+	},
+
 	setMarkerOnImageBox(x, y) {
 		let newMarker = {
 			x: x,
-			y: y
+			y: y,
+			color: colorList[this.state.selectedColorIdx]
 		}
 		let markers = this.state.markers;
 		markers.push(newMarker);
@@ -92,7 +105,7 @@ const ImageEditorView = React.createClass({
 		});
 	},
 
-	_onPressImage(e) {
+	onPressImage(e) {
 		const { locationX, locationY } = e.nativeEvent;
 		this.refs.imageBox.measure( (fx, fy, width, height, px, py) => {
 			if ((fx < locationX && fx + width > locationX) &&
@@ -121,9 +134,6 @@ const styles = StyleSheet.create({
 	imageBox: {
 		flex: 6,
 		flexDirection: 'column',
-	},
-	toolBox: {
-	backgroundColor: 'gray'
 	}
 });
 

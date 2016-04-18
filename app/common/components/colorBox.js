@@ -1,30 +1,52 @@
 import React, {
 	StyleSheet,
-	View
+	View,
+	TouchableHighlight
 } from 'react-native';
 
 const ColorBox = React.createClass({
 	propTypes: {
-		color: React.PropTypes.string.isRequired
+		idx: React.PropTypes.number.isRequired,
+		color: React.PropTypes.string.isRequired,
+		isSelected: React.PropTypes.bool
+	},
+
+	getDefaultProps() {
+		return {
+			isSelected: false
+		};
+	},
+
+
+	getColorBoxStyle() {
+		const { color, isSelected } = this.props;
+		var borderColor = isSelected ? 'white' : 'black';
+		return {
+			height: 30,
+			width: 30,
+			backgroundColor: color,
+			margin: 10,
+			borderColor: borderColor,
+			borderWidth: 2
+		}
+	},
+
+	onClickBox() {
+		const { idx, onSelect } = this.props;
+		onSelect(idx);
 	},
 
 	render() {
-		const { color } = this.props;
-		let colorBox = styles.colorBox;
-		colorBox['backgroundColor'] = color;
 		return (
-			<View style={colorBox}>
-			</View>
+			<TouchableHighlight style={{height: 30}} onPress={this.onClickBox}>
+				<View style={this.getColorBoxStyle()}>
+				</View>
+			</TouchableHighlight>
 		);
 	}
 });
 
 const styles = StyleSheet.create({
-	colorBox: {
-		height: 30,
-		width: 30,
-		margin: 10
-	}
 });
 
 export default ColorBox;

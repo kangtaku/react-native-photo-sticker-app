@@ -8,12 +8,14 @@ import React, {
 const Marker = React.createClass({
 	propTypes: {
 		x: React.PropTypes.number.isRequired,
-		y: React.PropTypes.number.isRequired
+		y: React.PropTypes.number.isRequired,
+		color: React.PropTypes.string.isRequired
 	},
 
 	getDefaultProps() {
 		return {
-			image: require('../../resources/close.png')
+			image: require('../../resources/close.png'),
+			color: 'red'
 		};
 	},
 
@@ -30,12 +32,12 @@ const Marker = React.createClass({
 	},
 
 	render() {
-		const { x, y } = this.props;
+		const { x, y, color } = this.props;
 		return (
 			<View>
 				<Image
 					source={require('../../resources/close.png')}
-					style={[this.getLocationStyle(x, y), {borderRadius: 5, tintColor: '#5ac8fa'}]} 
+					style={[this.getLocationStyle(x, y), {borderRadius: 5, tintColor: color}]} 
 				/>
 			</View>
 		);
